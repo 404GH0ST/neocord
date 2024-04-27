@@ -86,6 +86,7 @@ function neocord:setup(...)
   utils.set_option(self, "show_time", true)
   utils.set_option(self, "global_timer", false)
   utils.set_option(self, "file_assets", {})
+  utils.set_option(self, "custom_distro_text", nil) -- string or nil
   for name, asset in pairs(default_file_assets) do
     if not self.options.file_assets[name] then
       self.options.file_assets[name] = asset
@@ -778,7 +779,9 @@ function neocord:update_for_buffer(buffer, should_debounce)
   end
 
   local distro_text
-  if utils.get_gui_info() ~= nil then
+  if self.options.custom_distro_text then
+    distro_text = self.options.custom_distro_text
+  elseif utils.get_gui_info() ~= nil then
     distro_text = string.format("%s in %s", utils.get_nvim_distro(), utils.get_gui_info())
   else
     distro_text = utils.get_nvim_distro()
